@@ -34,108 +34,116 @@ curl --location 'http://localhost:8080/api/users' \
 ```
 
 ## working with k8s
-```
-https://benstitou-anas.medium.com/deploy-java-spring-application-with-mysql-db-on-kubernetes-1e456271c6a1
-```
 
 ## Dockers instructions
-
-### создаем образ
+### create image command
 
 ```bash
     docker build . -t evaddev/sb-mysql-users:latest -t evaddev/sb-mysql-users:1.0.0
 ```
 
-### проверяем
+### check image
 ```
     docker images | grep sb-mysql-users
 ```
 
-Push the Docker Image to a Registry
-репозиторий должен быть создан  docker hub
+### Push the Docker Image to a Registry
+
+should do login before push
+repository must be created at docker hub before
 ```bash
     docker push evaddev/sb-mysql-users --all-tags
 ```
-
+##  Working with local cluster
+### start minikube
 ```
  minikube status
 ```
+### to check
+```
+minikube status
+```
 
-```
-minikube start
-```
 go k8s folder on project directory
 ```
    cd k8s
 ```
 
-deploy your configmap:
+### deploy your configmap:
 ```bash
     kubectl apply -f mysql-configmap.yaml
 ```
 
+### deploy secrets
 ```bash
  kubectl apply -f .\secrets.yaml
 ```
 
+### deploy my-sql deployment
 ```bash
- kubectl apply -f mysql-deployment.yaml
+    kubectl apply -f mysql-deployment.yaml
 ```
 
- ### validate
+### validate
 ```bash
   kubectl get all
 ```
-
 ### check mysql
+#### ennter to service
 ````bash
   kubectl exec -it deploy/demo-app-mysql -- /bin/bash
 ```
 
-  ```bash
+#### run my sql command line inside container
+```bash
   mysql --user=$MYSQL_USER --password=$MYSQL_PASSWORD
-  ```
+```
 
+#### sql script to test
 ```bash
    select CURRENT_DATE()
 ```
-
+#### tonnel to use load balancer
 ```
  minikube tunnel
 ```
 
-### развернуть deployment
+### deploy spring application
 ```
     kubectl apply -f .\app-deployment.yaml
 ```
 
-### проверяем работо способность
+### logs
 ```bash
  kubectl logs pod/[POD_NAME]
 ```
 
-### Очиcтка
+### Stop and clean resources
  ```bash
     kubectl delete deploy [NAME]
     kubectl delete  [SERVICE_NAME]
     kubectl delete secrets  [SECRETS_NAME]
  ```
 
-
-пример на момент запуска
+How I see on my local
+```
 kubectl delete deploy demo-app-mysql
 kubectl delete deploy demo-app-spring
 
 kubectl delete  service/demo-app-mysql
 kubectl delete  service/demo-app-spring
 kubectl delete secrets mysql-pass
+```
 
-затем становить
-minikube stop
+### free local cluster
+```
+    minikube stop
+```
 
-осовбодить место
-minikube delete
-
+### free memory
+```
+    minikube delete
+```
 
 
 
