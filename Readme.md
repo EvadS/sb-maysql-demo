@@ -144,6 +144,3 @@ kubectl delete secrets mysql-pass
 ```
     minikube delete
 ```
-
-
-
