@@ -1,22 +1,25 @@
+# Spring boot + mysql + k8s
 
 ## Requirements for running app
 ### Data base
 Before the Spring Boot application can interact with the database, the specified database must exist
 ```mysql script
-CREATE DATABASE your_database_name;
+    CREATE DATABASE your_database_name;
 ```
 ### environments variables to start
-* ${DB_USERNAME}
-* ${DB_PASSWORD}
-* ${DB_NAME}
-
+* DB_NAME: demoDb
+* DB_SERVER: localhost
+* DB_PORT: 3306
+* DB_USERNAME: root
+* DB_PASSWORD: 31323334
 
 ## build project
 ```
-./mvnw clean install -DskipTests
+    ./mvnw clean install -DskipTests
 ```
 
 ## Crud operation
+
 ### get all users
 ```bash
     curl http://localhost:8080/api/users
@@ -34,7 +37,6 @@ curl --location 'http://localhost:8080/api/users' \
 ```
 
 ## working with k8s
-
 ## Dockers instructions
 ### create image command
 
@@ -43,7 +45,7 @@ curl --location 'http://localhost:8080/api/users' \
 ```
 
 ### check image
-```
+```bash
     docker images | grep sb-mysql-users
 ```
 
@@ -56,27 +58,25 @@ repository must be created at docker hub before
 ```
 ##  Working with local cluster
 ### start minikube
-```
- minikube status
+```bash
+    minikube status
 ```
 ### to check
-```
-minikube status
+```bash
+    minikube status
 ```
 
 go k8s folder on project directory
-```
+```bash
    cd k8s
 ```
-
 ### deploy your configmap:
 ```bash
     kubectl apply -f mysql-configmap.yaml
 ```
-
 ### deploy secrets
 ```bash
- kubectl apply -f .\secrets.yaml
+    kubectl apply -f .\secrets.yaml
 ```
 
 ### deploy my-sql deployment
@@ -86,26 +86,26 @@ go k8s folder on project directory
 
 ### validate
 ```bash
-  kubectl get all
+    kubectl get all
 ```
 ### check mysql
 #### ennter to service
 ````bash
-  kubectl exec -it deploy/demo-app-mysql -- /bin/bash
+    kubectl exec -it deploy/demo-app-mysql -- /bin/bash
 ```
 
 #### run my sql command line inside container
 ```bash
-  mysql --user=$MYSQL_USER --password=$MYSQL_PASSWORD
+    mysql --user=$MYSQL_USER --password=$MYSQL_PASSWORD
 ```
 
 #### sql script to test
 ```bash
-   select CURRENT_DATE()
+    select CURRENT_DATE()
 ```
 #### tonnel to use load balancer
 ```
- minikube tunnel
+    minikube tunnel
 ```
 
 ### deploy spring application
@@ -115,7 +115,7 @@ go k8s folder on project directory
 
 ### logs
 ```bash
- kubectl logs pod/[POD_NAME]
+    kubectl logs pod/[POD_NAME]
 ```
 
 ### Stop and clean resources
